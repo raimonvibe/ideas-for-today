@@ -1,6 +1,7 @@
 "use client";
 
-import { Search, X } from "lucide-react";
+import { useState } from "react";
+import { ChevronDown, Search, SlidersHorizontal, X } from "lucide-react";
 import {
   CATEGORY_FILTERS,
   type ActivityCategory,
@@ -23,7 +24,15 @@ export function ActivityFilters({
   resultCount,
   totalCount,
 }: Props) {
+  const [categoriesOpen, setCategoriesOpen] = useState(false);
   const hasFilters = query.trim() !== "" || category !== "all";
+  const activeLabel =
+    CATEGORY_FILTERS.find((c) => c.id === category)?.label ?? "All";
+
+  const handleCategoryChange = (id: ActivityCategory | "all") => {
+    onCategoryChange(id);
+    setCategoriesOpen(false);
+  };
 
   return (
     <div className="activity-filters">
@@ -52,8 +61,33 @@ export function ActivityFilters({
         )}
       </div>
 
+      <button
+        type="button"
+        className="flex w-full items-center justify-between gap-3 rounded-2xl border border-pink-100 bg-white/80 px-4 py-3 text-left shadow-sm transition-colors hover:border-pink-200 dark:border-emerald-900 dark:bg-emerald-950/60 dark:hover:border-emerald-700 md:hidden"
+        onClick={() => setCategoriesOpen((open) => !open)}
+        aria-expanded={categoriesOpen}
+        aria-controls="category-filters-panel"
+      >
+        <span className="flex min-w-0 items-center gap-2">
+          <SlidersHorizontal
+            className="h-5 w-5 shrink-0 text-pink-500 dark:text-emerald-400"
+            aria-hidden
+          />
+          <span className="truncate text-sm font-medium text-[var(--text)]">
+            Category: <span className="text-pink-600 dark:text-emerald-300">{activeLabel}</span>
+          </span>
+        </span>
+        <ChevronDown
+          className={`h-5 w-5 shrink-0 text-[var(--text-muted)] transition-transform duration-200 ${
+            categoriesOpen ? "rotate-180" : ""
+          }`}
+          aria-hidden
+        />
+      </button>
+
       <div
-        className="flex flex-wrap gap-2"
+        id="category-filters-panel"
+        className={`${categoriesOpen ? "flex" : "hidden"} flex-wrap gap-2 md:flex`}
         role="group"
         aria-label="Filter by category"
       >
@@ -63,7 +97,7 @@ export function ActivityFilters({
             <button
               key={id}
               type="button"
-              onClick={() => onCategoryChange(id)}
+              onClick={() => handleCategoryChange(id)}
               aria-pressed={active}
               className={`rounded-full px-4 py-2 text-sm font-medium transition-all ${
                 active
