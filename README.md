@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <strong>🜂 Live site</strong> — <a href="https://example.com"><!-- TODO: replace href with your live URL -->link coming soon</a>
+  <strong>🜂 Live site</strong> — <a href="https://ideas-for-today.vercel.app/">https://ideas-for-today.vercel.app/</a>
 </p>
 
 <h1 align="center">🜔 Ideas of What to Do Today</h1>
